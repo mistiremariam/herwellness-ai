@@ -1,0 +1,52 @@
+{
+  "name": "herwellness-ai",
+  "version": "1.0.0",
+  "private": true,
+  "description": "HerWellness-AI: A women-focused wellness web app integrating journal, exercise, nutrition, and AI companion features.",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "dependencies": {
+    "firebase": "^10.3.1",
+    "framer-motion": "^11.6.3",
+    "lucide-react": "^0.275.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-icons": "^4.11.0",
+    "react-router-dom": "^6.16.0"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.6.2",
+    "postcss": "^8.4.28",
+    "autoprefixer": "^10.4.14"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "keywords": [
+    "wellness",
+    "fitness",
+    "women",
+    "mental-health",
+    "nutrition",
+    "journal",
+    "react",
+    "firebase",
+    "AI"
+  ],
+  "author": "Mistiremariam Girma",
+  "license": "MIT"
+}
