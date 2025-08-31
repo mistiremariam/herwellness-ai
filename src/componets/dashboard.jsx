@@ -1,66 +1,78 @@
-import { useEffect, useState } from "react";
-import { db } from "../firebase"; // <-- your firebase config
-import { collection, getDocs, orderBy, query } from "firebase/firestore";
+// src/components/Dashboard.jsx
+import React, { useState } from "react";
 import { motion } from "framer-motion";
+import Journal from "../src/components/Journal";
+import Exercise from "../src/componets/Exercise";
+import Nutrition from "../src/components/Nutrition";
+import ChatBot from "../src/components/ChatBot";
+import { FaJournal, FaDumbbell, FaAppleAlt, FaRobot } from "react-icons/fa";
 
 export default function Dashboard() {
-  const [entries, setEntries] = useState([]);
+  const [activeTab, setActiveTab] = useState("journal");
 
-  useEffect(() => {
-    const fetchEntries = async () => {
-      const q = query(collection(db, "journalEntries"), orderBy("date", "desc"));
-      const snapshot = await getDocs(q);
-      setEntries(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
-    };
-    fetchEntries();
-  }, []);
+  const tabs = [
+    { id: "journal", label: "Journal", icon: <FaJournal /> },
+    { id: "exercise", label: "Exercise", icon: <FaDumbbell /> },
+    { id: "nutrition", label: "Nutrition", icon: <FaAppleAlt /> },
+    { id: "chatbot", label: "Chat AI", icon: <FaRobot /> },
+  ];
+
+  const renderActiveTab = () => {
+    switch (activeTab) {
+      case "journal":
+        return <Journal />;
+      case "exercise":
+        return <Exercise />;
+      case "nutrition":
+        return <Nutrition />;
+      case "chatbot":
+        return <ChatBot />;
+      default:
+        return <Journal />;
+    }
+  };
 
   return (
-    <div className="max-w-3xl mx-auto p-6">
-      <h2 className="text-3xl font-bold text-center text-pink-600 mb-6">
-        📖 My Journal Timeline
-      </h2>
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50">
+      {/* Header */}
+      <header className="p-6 flex justify-center shadow-md bg-pink-100 rounded-b-3xl mb-6">
+        <h1 className="text-3xl font-bold text-pink-600">
+          🌸 HerWellness AI Dashboard
+        </h1>
+      </header>
 
-      {entries.length === 0 ? (
-        <p className="text-center text-gray-500 italic">
-          No entries yet... Start journaling today 🌸
-        </p>
-      ) : (
-        <div className="space-y-6">
-          {entries.map((entry, index) => (
-            <motion.div
-              key={entry.id}
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className="relative flex items-start space-x-4"
-            >
-              {/* Timeline Dot */}
-              <div className="flex flex-col items-center">
-                <div className="w-6 h-6 rounded-full bg-pink-400 flex items-center justify-center text-white shadow-md">
-                  {entry.mood || "🤍"}
-                </div>
-                <div className="w-1 h-full bg-pink-200 mt-1"></div>
-              </div>
+      {/* Tab Navigation */}
+      <motion.nav
+        className="flex justify-center gap-4 mb-6 flex-wrap"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        {tabs.map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl font-medium transition-all ${
+              activeTab === tab.id
+                ? "bg-pink-500 text-white shadow-lg"
+                : "bg-white text-pink-500 hover:bg-pink-100"
+            }`}
+          >
+            {tab.icon}
+            {tab.label}
+          </button>
+        ))}
+      </motion.nav>
 
-              {/* Journal Card */}
-              <div className="flex-1 p-5 rounded-3xl bg-gradient-to-r from-pink-100 via-rose-50 to-purple-100 shadow-lg">
-                <p className="text-gray-700 whitespace-pre-wrap">{entry.text}</p>
-                <p className="mt-3 text-sm text-gray-500 text-right">
-                  {new Date(entry.date).toLocaleString("en-US", {
-                    weekday: "short",
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      )}
+      {/* Active Tab Content */}
+      <motion.main
+        className="px-6 pb-10"
+        key={activeTab}
+        initial={{ opacity: 0, x: 30 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.4 }}
+      >
+        {renderActiveTab()}
+      </motion.main>
     </div>
   );
 }
